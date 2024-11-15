@@ -22,7 +22,7 @@ def load_test_graph(filename):
 def test_algorithms():
     """Test all routing algorithms with the test graph"""
     # Load test graph
-    graph = load_test_graph('test3.txt')
+    graph = load_test_graph('test\\test3.txt')
 
     # Test Dijkstra's Algorithm
     print("\nTesting Dijkstra's Algorithm:")
