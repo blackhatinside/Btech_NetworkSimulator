@@ -1,0 +1,173 @@
+
+# Software Requirements Specification
+## GUI Telecom Network Simulator
+### Version 1.0
+
+## 1. Introduction
+
+### 1.1 Purpose
+This document specifies the software requirements for a Python-based Telecom Network Simulator with GUI interface. The simulator will demonstrate various routing algorithms and network principles commonly used in telecommunication networks.
+
+### 1.2 Scope
+The system will simulate packet transmission between network nodes, implement multiple routing protocols, and provide real-time visualization of network traffic and performance metrics.
+
+### 1.3 Intended Audience
+- C-DOT interview panel
+- Telecom network engineers
+- Software developers
+- Network architecture students
+
+## 2. System Overview
+
+### 2.1 System Architecture
+- Frontend: GUI built with Python Tkinter/PyQt
+- Backend: Python-based network simulation engine
+- Visualization: NetworkX with Matplotlib integration
+- Data Storage: In-memory graph representation
+
+### 2.2 System Features
+1. Network Topology Management
+2. Packet Transmission Simulation
+3. Multiple Routing Algorithm Implementations
+4. Real-time Traffic Visualization
+5. Performance Metrics Display
+6. Congestion Control Simulation
+
+## 3. Functional Requirements
+
+### 3.1 Network Topology Management
+- **FR1.1:** Create and modify network topologies
+- **FR1.2:** Add/remove nodes and links
+- **FR1.3:** Configure link weights and capacities
+- **FR1.4:** Support different topology types (mesh, ring, star, etc.)
+- **FR1.5:** Save and load network configurations
+
+### 3.2 Routing Algorithms
+- **FR2.1:** Implement Dijkstra's Algorithm
+  - Shortest path computation
+  - Path visualization
+  - Step-by-step execution option
+
+- **FR2.2:** Implement Bellman-Ford Algorithm
+  - Support for negative edge weights
+  - Distance vector routing simulation
+
+- **FR2.3:** Implement Floyd-Warshall Algorithm
+  - All-pairs shortest path computation
+  - Path matrix display
+
+- **FR2.4:** Implement Prim's Algorithm
+  - Minimum spanning tree generation
+  - Cost optimization visualization
+
+- **FR2.5:** Implement Kruskal's Algorithm
+  - Alternative MST computation
+  - Component merging visualization
+
+### 3.3 Packet Transmission
+- **FR3.1:** Packet Generation
+  - Create packets with source/destination
+  - Set packet size and priority
+
+- **FR3.2:** Transmission Simulation
+  - Queue management
+  - Packet forwarding
+  - Delivery confirmation
+
+- **FR3.3:** Congestion Control
+  - Buffer management
+  - Packet dropping simulation
+  - Flow control implementation
+
+### 3.4 Visualization
+- **FR4.1:** Network Graph Display
+  - Node representation
+  - Link status indication
+  - Weight/capacity labels
+
+- **FR4.2:** Traffic Animation
+  - Packet movement visualization
+  - Queue status display
+  - Congestion indication
+
+- **FR4.3:** Performance Metrics
+  - Latency graphs
+  - Throughput statistics
+  - Packet loss rates
+
+## 4. Non-Functional Requirements
+
+### 4.1 Performance
+- **NFR1.1:** Support networks with up to 50 nodes
+- **NFR1.2:** Maintain GUI responsiveness during simulation
+- **NFR1.3:** Process up to 1000 packets/second in simulation
+
+### 4.2 Usability
+- **NFR2.1:** Intuitive GUI interface
+- **NFR2.2:** Clear visualization of algorithms
+- **NFR2.3:** Help documentation and tooltips
+- **NFR2.4:** Consistent UI design
+
+### 4.3 Reliability
+- **NFR3.1:** Graceful error handling
+- **NFR3.2:** Data validation for user inputs
+- **NFR3.3:** Stable simulation engine
+
+## 5. Technical Requirements
+
+### 5.1 Software Dependencies
+- Python 3.8+
+- NetworkX
+- Matplotlib
+- Tkinter/PyQt
+- NumPy
+
+### 5.2 Hardware Requirements
+- Minimum 4GB RAM
+- 2GHz dual-core processor
+- 1024x768 minimum screen resolution
+
+## 6. Interface Requirements
+
+### 6.1 User Interface
+- Main network visualization window
+- Algorithm control panel
+- Performance metrics dashboard
+- Configuration sidebar
+- Status bar
+
+### 6.2 File Formats
+- JSON for topology storage
+- CSV for simulation results
+- PNG/SVG for graph exports
+
+## 7. Testing Requirements
+
+### 7.1 Unit Testing
+- Algorithm correctness verification
+- Packet handling validation
+- GUI component testing
+
+### 7.2 Integration Testing
+- End-to-end simulation testing
+- Performance benchmark testing
+- Cross-platform compatibility
+
+## 8. Deployment Requirements
+
+### 8.1 Installation
+- Single executable package
+- Automatic dependency resolution
+- Configuration file setup
+
+### 8.2 Documentation
+- User manual
+- API documentation
+- Example configurations
+
+## 9. Future Enhancements
+- Additional routing protocols
+- Advanced congestion control algorithms
+- 3D visualization
+- Network protocol simulation (TCP/IP, UDP)
+- Real-time network monitoring integration
