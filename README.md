@@ -81,24 +81,3 @@ Clicking Stop Simulation simply stops the rotation. Instead we can make this but
 
 Also, we need to test the program to check if its working fine or not. I have a test file (test3.txt) with the inputs to build a Graph. Can we perform testing on the project with this graph for all the 5 algorithms.
 
-# TESTING FILE INPUT FORMAT:
-
-The first line contains two integers n and m (2≤n≤10^5,0≤m≤10^5), where n is the number of vertices and m is the number of edges. Following m lines contain one edge each in form ai, bi and wi (1≤ai,bi≤n,1≤wi≤10^6), where ai,bi are edge endpoints and wi is the length of the edge.
-
-Sample Input 3:
-10 15
-0 1 7
-0 2 9
-0 3 14
-1 2 10
-1 4 15
-2 3 2
-2 5 11
-3 6 9
-4 5 6
-5 6 3
-5 7 1
-6 8 5
-7 8 12
-7 9 7
-8 9 4

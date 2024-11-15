@@ -59,39 +59,74 @@ class RoutingAlgorithms:
         return path, distances, steps
 
     @staticmethod
-    def bellman_ford(graph: nx.Graph, source: str, target: str) -> Tuple[List[str], Dict, List[Tuple]]:
+    def bellman_ford(graph: nx.Graph, source: str, target: str) -> Tuple[Optional[List[str]], Dict, List[Tuple]]:
         """
         Implements Bellman-Ford algorithm with negative edge detection.
         Used in RIP (Routing Information Protocol).
+
+        Args:
+            graph: NetworkX graph object
+            source: Starting node
+            target: Destination node
+
+        Returns:
+            - path: List of nodes in shortest path (or None if negative cycle)
+            - distances: Dictionary of distances from source
+            - steps: List of algorithm steps for visualization
         """
+        # Initialize distances and predecessors
         distances = {node: float('infinity') for node in graph.nodes()}
         distances[source] = 0
-        previous = {node: None for node in graph.nodes()}
+        predecessors = {node: None for node in graph.nodes()}
         steps = []
 
-        # Relax edges |V| - 1 times
-        for _ in range(len(graph.nodes()) - 1):
-            for u, v in graph.edges():
-                weight = graph[u][v]['weight']
-                if distances[u] + weight < distances[v]:
-                    distances[v] = distances[u] + weight
-                    previous[v] = u
-                    steps.append(('relax', u, v, distances[v]))
+        # Add initial step to show starting state
+        steps.append(('visit', source, 0))
 
-        # Check for negative cycles
+        # Main relaxation loop
+        for i in range(len(graph.nodes()) - 1):
+            # Track if any updates were made in this iteration
+            updates_made = False
+
+            # Convert edges to list of tuples for consistent ordering
+            edges = list(graph.edges())
+
+            # Process each edge
+            for u, v in edges:
+                # Process edge in both directions (since it's an undirected graph)
+                for a, b in [(u, v), (v, u)]:
+                    weight = graph[a][b]['weight']
+                    if distances[a] != float('infinity') and distances[a] + weight < distances[b]:
+                        distances[b] = distances[a] + weight
+                        predecessors[b] = a
+                        updates_made = True
+                        steps.append(('update', b, distances[b], a))
+
+            # If no updates were made, we can terminate early
+            if not updates_made:
+                break
+
+        # Check for negative weight cycles
         for u, v in graph.edges():
             weight = graph[u][v]['weight']
-            if distances[u] + weight < distances[v]:
+            if distances[u] + weight < distances[v] or distances[v] + weight < distances[u]:
                 steps.append(('negative_cycle', u, v))
                 return None, distances, steps
 
         # Reconstruct path
+        if distances[target] == float('infinity'):
+            return None, distances, steps
+
         path = []
         current = target
         while current is not None:
             path.append(current)
-            current = previous[current]
+            current = predecessors[current]
         path.reverse()
+
+        # Verify path exists from source to target
+        if path[0] != source or path[-1] != target:
+            return None, distances, steps
 
         return path, distances, steps
 

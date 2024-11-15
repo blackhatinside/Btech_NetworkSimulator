@@ -165,13 +165,35 @@ class MainWindow:
                 messagebox.showinfo("Info", f"Edge between {source} and {target} already exists")
 
     def send_packet(self):
+        """Shows the final shortest path for the selected algorithm"""
         nodes = list(self.network.nodes.keys())
         if len(nodes) >= 2:
             source = nodes[0]
             destination = nodes[-1]
-            packet = self.network.create_packet(source, destination)
-            if packet:
-                self.network_canvas.animate_path(packet.path)
+            algorithm = self.algorithm_var.get()
+
+            try:
+                path = None
+                # Get shortest path based on selected algorithm
+                if algorithm == "Dijkstra":
+                    path, _, _ = RoutingAlgorithms.dijkstra(self.network.graph, source, destination)
+                elif algorithm == "Bellman-Ford":
+                    path, _, _ = RoutingAlgorithms.bellman_ford(self.network.graph, source, destination)
+                elif algorithm == "Floyd-Warshall":
+                    dist, next_hop, _ = RoutingAlgorithms.floyd_warshall(self.network.graph)
+                    path = self.reconstruct_path(source, destination, next_hop)
+                elif algorithm in ["Prim's MST", "Kruskal's MST"]:
+                    messagebox.showinfo("Info", "Packet sending is only available for path-finding algorithms")
+                    return
+
+                if path:
+                    # Animate the final path
+                    self.network_canvas.animate_shortest_path(path)
+                    self.status_bar.config(text=f"Shortest path from {source} to {destination} using {algorithm}")
+                else:
+                    messagebox.showwarning("Warning", "No path found between selected nodes")
+            except Exception as e:
+                messagebox.showerror("Error", f"Algorithm failed: {str(e)}")
 
     def reconstruct_path(self, source, destination, next_hop):
         """Reconstruct path from Floyd-Warshall next_hop matrix"""
@@ -184,7 +206,7 @@ class MainWindow:
         return path
 
     def start_simulation(self):
-        """Start simulation with selected algorithm"""
+        """Shows the step-by-step process of the selected algorithm"""
         algorithm = self.algorithm_var.get()
         nodes = list(self.network.nodes.keys())
 
@@ -194,14 +216,16 @@ class MainWindow:
 
         if algorithm in ["Prim's MST", "Kruskal's MST"]:
             # For MST algorithms
-            if algorithm == "Prim's MST":
-                mst, _ = RoutingAlgorithms.prim_mst(self.network.graph)
-            else:
-                mst, _ = RoutingAlgorithms.kruskal_mst(self.network.graph)
+            try:
+                if algorithm == "Prim's MST":
+                    _, steps = RoutingAlgorithms.prim_mst(self.network.graph)
+                else:
+                    _, steps = RoutingAlgorithms.kruskal_mst(self.network.graph)
 
-            # Highlight MST edges
-            self.network_canvas.highlight_mst(mst.edges())
-            self.status_bar.config(text=f"Minimum Spanning Tree found using {algorithm}")
+                self.network_canvas.animate_mst_process(steps)
+                self.status_bar.config(text=f"Showing {algorithm} construction process")
+            except Exception as e:
+                messagebox.showerror("Error", f"Algorithm failed: {str(e)}")
         else:
             # For path-finding algorithms
             if len(nodes) >= 2:
@@ -209,21 +233,20 @@ class MainWindow:
                 destination = nodes[-1]
 
                 try:
-                    # Get path based on selected algorithm
+                    # Get algorithm steps
+                    steps = None
                     if algorithm == "Dijkstra":
-                        path, _, _ = RoutingAlgorithms.dijkstra(self.network.graph, source, destination)
+                        _, _, steps = RoutingAlgorithms.dijkstra(self.network.graph, source, destination)
                     elif algorithm == "Bellman-Ford":
-                        path, _, _ = RoutingAlgorithms.bellman_ford(self.network.graph, source, destination)
+                        _, _, steps = RoutingAlgorithms.bellman_ford(self.network.graph, source, destination)
                     elif algorithm == "Floyd-Warshall":
-                        dist, next_hop, _ = RoutingAlgorithms.floyd_warshall(self.network.graph)
-                        path = self.reconstruct_path(source, destination, next_hop)
+                        _, _, steps = RoutingAlgorithms.floyd_warshall(self.network.graph)
 
-                    if path:
-                        # Start animation
-                        self.network_canvas.animate_path(path)
-                        self.status_bar.config(text=f"Simulating path from {source} to {destination} using {algorithm}")
+                    if steps:
+                        self.network_canvas.animate_pathfinding_process(steps, algorithm)
+                        self.status_bar.config(text=f"Showing {algorithm} algorithm process")
                     else:
-                        messagebox.showwarning("Warning", "No path found between selected nodes")
+                        messagebox.showwarning("Warning", "No steps generated")
                 except Exception as e:
                     messagebox.showerror("Error", f"Algorithm failed: {str(e)}")
 
